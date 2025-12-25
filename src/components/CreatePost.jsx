@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import { AuthContext } from "../App";
+import { useAuth } from "../context/AuthContext";
 import { FaImage, FaSmile, FaMapMarkerAlt } from "react-icons/fa";
 
 const CreatePost = ({ onPostCreated }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ const CreatePost = ({ onPostCreated }) => {
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder={`Ne düşünüyorsun, ${user?.fullName}?`}
+          placeholder={`Neler oluyor, ${user?.fullName}?`}
           maxLength={500}
         />
 
