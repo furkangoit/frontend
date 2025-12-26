@@ -1,0 +1,474 @@
+/* Profile.css - Profil Sayfası Stilleri */
+
+.profile-container {
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+
+.profile-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Cover Photo */
+.cover-photo {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 0 0 16px 16px;
+}
+
+.cover-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-cover-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.edit-cover-btn:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 30px;
+    margin-top: -50px;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    position: relative;
+}
+
+.profile-avatar img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.edit-avatar-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.edit-avatar-btn:hover {
+    transform: scale(1.1);
+}
+
+.profile-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.follow-btn {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.follow-btn.following {
+    background: #e1e5e9;
+    color: #666;
+}
+
+.follow-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.follow-btn.following:hover {
+    background: #ff4757;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+}
+
+.message-btn {
+    padding: 10px 20px;
+    background: white;
+    color: #333;
+    border: 2px solid #e1e5e9;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.message-btn:hover {
+    border-color: #667eea;
+    background: #f8f9fa;
+}
+
+.more-btn {
+    width: 40px;
+    height: 40px;
+    background: white;
+    color: #666;
+    border: 2px solid #e1e5e9;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.more-btn:hover {
+    background: #f8f9fa;
+    border-color: #667eea;
+}
+
+/* Profile Info */
+.profile-info {
+    padding: 0 30px;
+    margin-bottom: 30px;
+}
+
+.profile-name {
+    margin: 0 0 5px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+}
+
+.profile-username {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.profile-bio {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    max-width: 600px;
+}
+
+.profile-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 14px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 30px;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.stat:hover {
+    color: #667eea;
+}
+
+.stat strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+}
+
+.stat span {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Profile Tabs */
+.profile-tabs {
+    display: flex;
+    border-bottom: 1px solid #e1e5e9;
+    margin: 0 30px;
+    margin-bottom: 30px;
+}
+
+.tab {
+    padding: 15px 25px;
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tab:hover {
+    color: #667eea;
+}
+
+.tab.active {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 3px 3px 0 0;
+}
+
+/* Profile Posts */
+.profile-posts {
+    padding: 0 30px;
+    padding-bottom: 50px;
+}
+
+.no-posts {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 16px;
+    color: #666;
+    font-size: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.liked-posts {
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+    .cover-photo {
+        height: 200px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 20px;
+        margin-top: -40px;
+    }
+
+    .profile-avatar img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-actions {
+        margin-top: 20px;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .follow-btn,
+    .message-btn {
+        flex: 1;
+    }
+
+    .profile-info,
+    .profile-tabs,
+    .profile-posts {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .profile-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .profile-stats {
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 480px) {
+    .cover-photo {
+        height: 150px;
+    }
+
+    .profile-avatar img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .profile-actions {
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+
+    .profile-name {
+        font-size: 24px;
+    }
+
+    .profile-bio {
+        font-size: 15px;
+    }
+}
+
+/* Animasyonlar */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-content>* {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.profile-content>*:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.profile-content>*:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.profile-content>*:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.profile-content>*:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.profile-content>*:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+/* Karanlık Tema Desteği */
+@media (prefers-color-scheme: dark) {
+    .profile-container {
+        background-color: #1a1a1a;
+    }
+
+    .profile-name,
+    .profile-bio,
+    .stat strong {
+        color: #f5f6fa;
+    }
+
+    .profile-username,
+    .profile-details,
+    .stat span {
+        color: #aaa;
+    }
+
+    .profile-avatar img {
+        border-color: #2d3436;
+        background: #2d3436;
+    }
+
+    .follow-btn {
+        background: #444;
+    }
+
+    .message-btn,
+    .more-btn {
+        background: #2d3436;
+        border-color: #444;
+        color: #aaa;
+    }
+
+    .message-btn:hover,
+    .more-btn:hover {
+        background: #3c4043;
+        border-color: #667eea;
+    }
+
+    .no-posts,
+    .media-grid,
+    .liked-posts {
+        background: #2d3436;
+        color: #aaa;
+    }
+
+    .tab {
+        color: #aaa;
+    }
+
+    .tab.active {
+        color: #667eea;
+    }
+}

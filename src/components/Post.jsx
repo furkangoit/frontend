@@ -1,179 +1,286 @@
-// src/pages/Posts.jsx veya src/components/Posts.jsx
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// Post.jsx - GÜNCELLENMİŞ VERSİYON
 
-function Posts() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+import React, { useState } from 'react';
+import { useSocket } from '../context/SocketContext';
+import './Post.css';
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
+const Post = (props) => {
+  const {
+    user = { name: 'Kullanıcı', avatar: 'https://via.placeholder.com/40' },
+    content = '',
+    likes = 0,
+    comments = 0,
+    time = 'Şimdi',
+    image = null,
+    shares = 0,
+    ...rest
+  } = props;
+  console.log('Post props:', { user, content, likes, comments, time, image, shares });
 
-  const fetchPosts = async () => {
-    console.log('🔄 Gönderiler yükleniyor...');
-    setLoading(true);
-    setError('');
+  // Socket notification
+  const { sendNotification } = useSocket();
 
-    try {
-      // 1. Önce backend bağlantısını test et
-      const healthCheck = await axios.get('http://localhost:5000/api/health');
-      console.log('✅ Backend sağlıklı:', healthCheck.data);
+  // State'ler
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes);
+  const [isSaved, setIsSaved] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [commentInput, setCommentInput] = useState('');
+  const [postComments, setPostComments] = useState([]);
+  const [shareCount, setShareCount] = useState(shares);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-      // 2. Gönderileri getir
-      const response = await axios.get('http://localhost:5000/api/posts', {
-        timeout: 5000
+  const shareOptions = [
+    { platform: 'Facebook', icon: '📘', className: 'facebook' },
+    { platform: 'Twitter', icon: '🐦', className: 'twitter' },
+    { platform: 'WhatsApp', icon: '💚', className: 'whatsapp' },
+    { platform: 'LinkedIn', icon: '💼', className: 'linkedin' },
+    { platform: 'Instagram', icon: '📷', className: 'instagram' },
+    { platform: 'Kopyala', icon: '📋', className: 'copy' },
+  ];
+
+  // Beğeni işlemi
+  const handleLike = () => {
+    if (isLiked) {
+      setLikeCount(prev => prev - 1);
+    } else {
+      setLikeCount(prev => prev + 1);
+      // Bildirim gönder
+      sendNotification && sendNotification({
+        type: 'like',
+        fromUserId: 'current-user-id', // Gerçek uygulamada localStorage'dan alınmalı
+        fromUsername: 'Siz',
+        targetUserId: user?.id || 'post-owner-id',
+        postId: props.id,
+        message: 'gönderinizi beğendi'
       });
-      
-      console.log('📦 Gönderiler geldi:', response.data);
-      setPosts(response.data.data);
-      
-    } catch (err) {
-      console.error('❌ Hata:', err);
-      
-      if (err.code === 'ECONNABORTED') {
-        setError('⏱️ Backend yanıt vermedi (timeout)');
-      } else if (err.response) {
-        setError(`Backend hatası: ${err.response.status} - ${err.response.data?.message}`);
-      } else if (err.request) {
-        setError('Backend\'e bağlanılamadı. Port 5000 çalışıyor mu?');
-      } else {
-        setError(`Beklenmeyen hata: ${err.message}`);
-      }
-      
-      // Hata durumunda test verileri göster
-      setPosts([
-        { id: 1, title: 'TEST - Backend Yanıt Vermedi', content: 'Lütfen backend terminalini kontrol edin', author: 'Sistem', date: '2024-01-01', likes: 0, comments: 0 }
-      ]);
-    } finally {
-      setLoading(false);
     }
+    setIsLiked(!isLiked);
   };
 
-  const testBackend = () => {
-    window.open('http://localhost:5000/api/posts', '_blank');
+  // Kaydetme işlemi
+  const handleSave = () => {
+    setIsSaved(!isSaved);
+    alert(isSaved ? 'Gönderi kaydedilmekten çıkarıldı' : 'Gönderi kaydedildi!');
   };
 
-  if (loading) {
-    return (
-      <div style={{ textAlign: 'center', padding: '50px' }}>
-        <div style={{ fontSize: '48px', marginBottom: '20px' }}>🔄</div>
-        <h3>Gönderiler yükleniyor...</h3>
-        <p>Backend: http://localhost:5000</p>
-      </div>
-    );
-  }
+  // Yorum gösterme/gizleme
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
+  // Yorum ekleme
+  const handleAddComment = () => {
+    if (commentInput.trim() === '') {
+      alert('Lütfen yorumunuzu yazın!');
+      return;
+    }
+
+    const newComment = {
+      id: Date.now(),
+      user: { name: 'Siz', avatar: 'https://ui-avatars.com/api/?name=Siz&background=667eea&color=fff' },
+      content: commentInput,
+      time: 'Şimdi'
+    };
+
+    setPostComments([...postComments, newComment]);
+    setCommentInput('');
+    alert('Yorumunuz eklendi!');
+  };
+
+  // Paylaşma işlemi (modal ile)
+  const handleShare = () => {
+    setShareCount(prev => prev + 1);
+    setShowShareModal(true);
+  };
+
+  // Link kopyalama işlemi
+  const handleCopyLink = () => {
+    const postLink = `${window.location.origin}/post/${props.id || Date.now()}`;
+    navigator.clipboard.writeText(postLink)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      })
+      .catch(err => {
+        console.error('Kopyalama hatası:', err);
+        alert('Link kopyalanamadı!');
+      });
+  };
+
+  // Default değerler için kontrol
+  const safeUser = user || { name: 'Kullanıcı', avatar: 'https://via.placeholder.com/40' };
+  const safeContent = content || 'Gönderi içeriği bulunamadı';
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-      <h1 style={{ color: '#333' }}>📝 SocialApp Gönderiler</h1>
-      
-      <div style={{ 
-        background: '#f5f5f5', 
-        padding: '20px', 
-        borderRadius: '10px',
-        marginBottom: '30px'
-      }}>
-        <h3>🔧 Kontrol Paneli</h3>
-        
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-          <button 
-            onClick={fetchPosts}
-            style={{
-              padding: '10px 20px',
-              background: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          >
-            🔄 Gönderileri Yenile
-          </button>
-          
-          <button 
-            onClick={testBackend}
-            style={{
-              padding: '10px 20px',
-              background: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer'
-            }}
-          >
-            🔗 Backend'i Test Et
-          </button>
-        </div>
-        
-        {error && (
-          <div style={{ 
-            padding: '15px', 
-            background: '#f8d7da',
-            color: '#721c24',
-            borderRadius: '5px',
-            border: '1px solid #f5c6cb'
-          }}>
-            <strong>⚠️ Hata:</strong> {error}
-          </div>
-        )}
-        
-        <div style={{ marginTop: '20px', fontSize: '14px' }}>
-          <p><strong>Backend URL:</strong> http://localhost:5000</p>
-          <p><strong>API Endpoint:</strong> /api/posts</p>
-          <p><strong>Gönderi Sayısı:</strong> {posts.length}</p>
-          <p><strong>Backend Durumu:</strong> <span style={{color: 'green'}}>✅ Çalışıyor</span></p>
+    <div className="post-card">
+      {/* Post Header */}
+      <div className="post-header">
+        <img 
+          src={safeUser.avatar} 
+          alt={safeUser.name} 
+          className="user-avatar"
+        />
+        <div className="user-info">
+          <h4>{safeUser.name}</h4>
+          <span className="post-time">{time}</span>
         </div>
       </div>
 
-      <h2>📋 Gönderiler ({posts.length})</h2>
-      
-      {posts.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-          <p>📭 Henüz gönderi yok</p>
+      {/* Post Content */}
+      <div className="post-content">
+        <p>{safeContent}</p>
+      </div>
+
+      {/* Post Image (if exists) */}
+      {image && (
+        <div className="post-media">
+          <img src={image} alt="Gönderi" />
         </div>
-      ) : (
-        <div>
-          {posts.map(post => (
-            <div 
-              key={post.id}
-              style={{
-                border: '1px solid #ddd',
-                borderRadius: '10px',
-                padding: '20px',
-                marginBottom: '20px',
-                background: 'white',
-                boxShadow: '0 3px 10px rgba(0,0,0,0.1)'
-              }}
+      )}
+
+      {/* Post Stats */}
+      <div className="post-stats">
+        <span>{likeCount.toLocaleString()} beğeni</span>
+        <span>{comments + postComments.length} yorum</span>
+        <span>{shareCount} paylaşım</span>
+      </div>
+
+      {/* Post Actions */}
+      <div className="post-actions">
+        <button 
+          onClick={handleLike} 
+          className={`action-btn ${isLiked ? 'liked' : ''}`}
+        >
+          {isLiked ? '❤️ Beğendin' : '🤍 Beğen'}
+        </button>
+        
+        <button 
+          onClick={toggleComments}
+          className="action-btn"
+        >
+          💬 Yorum Yap
+        </button>
+        
+        <button 
+          onClick={handleShare}
+          className="action-btn"
+        >
+          🔄 Paylaş
+        </button>
+        
+        <button 
+          onClick={handleSave} 
+          className={`action-btn ${isSaved ? 'saved' : ''}`}
+        >
+          {isSaved ? '🔖 Kaydedildi' : '📌 Kaydet'}
+        </button>
+      </div>
+
+      {/* Yorumlar Bölümü */}
+      {showComments && (
+        <div className="comments-section">
+          {/* Yorum Ekleme */}
+          <div className="add-comment">
+            <input
+              type="text"
+              placeholder="Yorumunuzu yazın..."
+              value={commentInput}
+              onChange={(e) => setCommentInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
+              className="comment-input"
+            />
+            <button 
+              onClick={handleAddComment}
+              className="comment-button"
             >
-              <h3 style={{ marginTop: '0', color: '#2c3e50' }}>{post.title}</h3>
-              <p style={{ color: '#555', lineHeight: '1.6' }}>{post.content}</p>
-              
-              <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginTop: '20px',
-                paddingTop: '15px',
-                borderTop: '1px solid #eee'
-              }}>
-                <div style={{ fontSize: '14px', color: '#7f8c8d' }}>
-                  <span style={{ marginRight: '15px' }}>👤 {post.author}</span>
-                  <span style={{ marginRight: '15px' }}>📅 {post.date}</span>
+              Gönder
+            </button>
+          </div>
+
+          {/* Yorum Listesi */}
+          {postComments.length > 0 ? (
+            <div className="comments-list">
+              {postComments.map(comment => (
+                <div key={comment.id} className="comment-item">
+                  <img 
+                    src={comment.user.avatar} 
+                    alt={comment.user.name}
+                    className="comment-avatar"
+                  />
+                  <div className="comment-content">
+                    <div className="comment-header">
+                      <strong>{comment.user.name}</strong>
+                      <span className="comment-time">{comment.time}</span>
+                    </div>
+                    <p>{comment.content}</p>
+                  </div>
                 </div>
-                
-                <div style={{ fontSize: '14px', color: '#7f8c8d' }}>
-                  <span style={{ marginRight: '15px' }}>❤️ {post.likes} beğeni</span>
-                  <span>💬 {post.comments} yorum</span>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <p className="no-comments">Henüz yorum yok. İlk yorumu siz yapın!</p>
+          )}
+        </div>
+      )}
+
+      {/* Paylaşım Modalı */}
+      {showShareModal && (
+        <div className="share-modal-overlay" onClick={() => setShowShareModal(false)}>
+          <div className="share-modal" onClick={e => e.stopPropagation()}>
+            <div className="share-modal-header">
+              <h3>Gönderiyi Paylaş</h3>
+              <button onClick={() => setShowShareModal(false)}>✕</button>
+            </div>
+            <div className="modal-post-preview">
+              <div className="modal-post-author">
+                <img src={safeUser.avatar} alt={safeUser.name} />
+                <h4>{safeUser.name}</h4>
+              </div>
+              <p className="modal-post-content">
+                {safeContent.length > 100 ? safeContent.substring(0, 100) + '...' : safeContent}
+              </p>
+            </div>
+            <div className="share-options">
+              {shareOptions.map(option => (
+                <button
+                  key={option.platform}
+                  className={`share-option ${option.className}`}
+                  onClick={() => {
+                    alert(`${option.platform} ile paylaşıldı! (Simülasyon)`);
+                    setShowShareModal(false);
+                  }}
+                >
+                  <span className="share-icon">{option.icon}</span>
+                  <span>{option.platform}</span>
+                </button>
+              ))}
+            </div>
+            <div className="copy-link-section">
+              <h4>Veya linki kopyala:</h4>
+              <div className="link-container">
+                <input
+                  type="text"
+                  value={`${window.location.origin}/post/${props.id || Date.now()}`}
+                  readOnly
+                  className="link-input"
+                />
+                <button onClick={handleCopyLink} className="copy-link-btn">
+                  {copied ? '✓ Kopyalandı' : 'Kopyala'}
+                </button>
+              </div>
+              {copied && (
+                <div className="copy-success">
+                  ✓ Link panoya kopyalandı!
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
-}
+};
 
-export default Posts;
+export default Post;

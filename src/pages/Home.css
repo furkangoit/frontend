@@ -1,446 +1,90 @@
-/* Home.css - Twitter benzeri feed */
+/* Home.css - MODERN VERSİYON */
+.home-page {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 .home-container {
-    display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 60px;
 }
 
-/* SOL SİDEBAR */
-.sidebar {
-    width: 250px;
-    padding: 20px;
-    border-right: 1px solid #eff3f4;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-}
-
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    color: #1d9bf0;
-    cursor: pointer;
-}
-
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 12px;
-    text-decoration: none;
-    color: #0f1419;
-    font-size: 20px;
-    border-radius: 30px;
-    transition: all 0.2s;
-}
-
-.nav-item:hover {
-    background-color: #e7e7e8;
-}
-
-.nav-item.active {
-    font-weight: bold;
-}
-
-.post-button {
-    width: 90%;
-    padding: 15px;
-    background: #1d9bf0;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-size: 17px;
-    font-weight: bold;
-    margin-top: 20px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.post-button:hover {
-    background: #1a8cd8;
-}
-
-/* ORTA KISIM */
-.main-feed {
-    flex: 1;
-    max-width: 600px;
-    border-right: 1px solid #eff3f4;
+/* MAIN CONTENT */
+.main-content {
+  flex: 1;
+  max-width: 600px;
+  border-left: 1px solid #2f3336;
+  border-right: 1px solid #2f3336;
+  min-height: 100vh;
 }
 
 .feed-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eff3f4;
-    position: sticky;
-    top: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 10;
+  position: sticky;
+  top: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #2f3336;
+  padding: 0 16px;
+  height: 53px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
 }
 
-.feed-header h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: bold;
+.feed-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
 }
 
 .refresh-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background 0.2s;
+  background: transparent;
+  border: none;
+  color: #1d9bf0;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
 }
 
 .refresh-btn:hover {
-    background: #e7e7e8;
+  background: rgba(29, 155, 240, 0.1);
 }
 
-/* YENİ POST ALANI */
-.create-post {
-    display: flex;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eff3f4;
+.refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.user-avatar {
-    margin-right: 15px;
+/* POSTS FEED */
+.posts-feed {
+  padding: 0;
 }
 
-.user-avatar img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #71767b;
 }
 
-.post-form {
-    flex: 1;
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
 }
 
-.post-input {
-    width: 100%;
-    border: none;
-    resize: none;
-    font-size: 20px;
-    padding: 10px 0;
-    font-family: inherit;
-    min-height: 100px;
+.empty-state h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #e7e9ea;
 }
 
-.post-input:focus {
-    outline: none;
-}
-
-.post-input::placeholder {
-    color: #536471;
-}
-
-.post-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #eff3f4;
-}
-
-.actions-left {
-    display: flex;
-    gap: 15px;
-}
-
-.icon-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: #1d9bf0;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: background 0.2s;
-}
-
-.icon-btn:hover {
-    background: #e8f5fd;
-}
-
-.post-submit {
-    padding: 10px 20px;
-    background: #1d9bf0;
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.post-submit:hover:not(:disabled) {
-    background: #1a8cd8;
-}
-
-.post-submit:disabled {
-    background: #8ecdf8;
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-/* GÖNDERİLER LİSTESİ */
-.posts-list {
-    padding: 0;
-}
-
-.post-item {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eff3f4;
-    transition: background 0.2s;
-}
-
-.post-item:hover {
-    background: #f7f9f9;
-}
-
-.post-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.post-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 12px;
-    object-fit: cover;
-}
-
-.post-user-info {
-    flex: 1;
-}
-
-.post-author {
-    font-weight: bold;
-    color: #0f1419;
-    display: block;
-}
-
-.post-meta {
-    color: #536471;
-    font-size: 15px;
-    display: block;
-}
-
-.post-content {
-    font-size: 15px;
-    line-height: 1.5;
-    color: #0f1419;
-    margin-bottom: 15px;
-}
-
-.post-image {
-    border-radius: 15px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.post-image img {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-}
-
-.post-stats {
-    display: flex;
-    justify-content: space-between;
-    max-width: 425px;
-    color: #536471;
-}
-
-.stat-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: none;
-    border: none;
-    color: inherit;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 13px;
-    transition: all 0.2s;
-}
-
-.stat-btn:hover {
-    color: #1d9bf0;
-    background: #e8f5fd;
-}
-
-.like-btn:hover {
-    color: #f91880;
-}
-
-.retweet-btn:hover {
-    color: #00ba7c;
-}
-
-/* SAĞ SİDEBAR */
-.right-sidebar {
-    width: 350px;
-    padding: 20px;
-}
-
-.search-box {
-    margin-bottom: 20px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 12px 20px;
-    border: none;
-    background: #eff3f4;
-    border-radius: 30px;
-    font-size: 15px;
-}
-
-.search-input:focus {
-    outline: none;
-    background: white;
-    border: 1px solid #1d9bf0;
-}
-
-.trends-box {
-    background: #f7f9f9;
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-
-.trends-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.trend-item {
-    padding: 10px 0;
-    border-bottom: 1px solid #eff3f4;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.trend-item:hover {
-    background: #edf2f7;
-}
-
-.trend-item:last-child {
-    border-bottom: none;
-}
-
-.trend-category {
-    font-size: 13px;
-    color: #536471;
-}
-
-.trend-tag {
-    font-weight: bold;
-    display: block;
-    margin: 2px 0;
-}
-
-.trend-count {
-    font-size: 13px;
-    color: #536471;
-}
-
-.debug-panel {
-    background: #f7f9f9;
-    border-radius: 15px;
-    padding: 15px;
-    font-size: 14px;
-}
-
-.debug-panel h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.debug-info {
-    margin: 8px 0;
-}
-
-.small-button {
-    padding: 8px 16px;
-    background: #1d9bf0;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: background 0.2s;
-}
-
-.small-button:hover {
-    background: #1a8cd8;
-}
-
-/* LOADING ve ERROR */
-.loading-state,
-.error-state {
-    text-align: center;
-    padding: 50px 20px;
-    color: #536471;
-}
-
-.error-state {
-    color: #f4212e;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1000px) {
-    .sidebar {
-        width: 80px;
-        padding: 20px 10px;
-    }
-
-    .nav-item span {
-        display: none;
-    }
-
-    .post-button span {
-        display: none;
-    }
-
-    .right-sidebar {
-        display: none;
-    }
-}
-
-@media (max-width: 700px) {
-    .sidebar {
-        display: none;
-    }
-
-    .home-container {
-        flex-direction: column;
-    }
-
-    .main-feed {
-        max-width: 100%;
-    }
+.empty-state p {
+  font-size: 15px;
+  color: #71767b;
 }

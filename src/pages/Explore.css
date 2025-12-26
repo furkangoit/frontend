@@ -1,0 +1,70 @@
+.explore-container {
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+
+.explore-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.search-section {
+    margin-bottom: 40px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.trending-section,
+.discover-section {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.trending-section h2,
+.discover-section h2 {
+    margin-top: 0;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.trending-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.topic-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.topic-card:hover {
+    transform: translateY(-5px);
+}
+
+.topic-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+}
+
+.topic-card p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 14px;
+}

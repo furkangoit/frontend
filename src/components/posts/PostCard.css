@@ -1,0 +1,106 @@
+/* PostCard.css */
+.post-card {
+    padding: 15px;
+    border-bottom: 1px solid #2f3336;
+    transition: background 0.2s;
+}
+
+.post-card:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
+    object-fit: cover;
+}
+
+.post-user-info {
+    flex: 1;
+}
+
+.post-author {
+    font-weight: bold;
+    color: white;
+    font-size: 15px;
+}
+
+.post-meta {
+    color: #71767b;
+    font-size: 14px;
+}
+
+.post-content {
+    color: white;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.post-media {
+    margin-bottom: 15px;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #2f3336;
+}
+
+.post-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    max-width: 425px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: #71767b;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.like-btn:hover {
+    color: #f91880;
+}
+
+.comment-btn:hover {
+    color: #1d9bf0;
+}
+
+.retweet-btn:hover {
+    color: #00ba7c;
+}
+
+.share-btn:hover {
+    color: #1d9bf0;
+}
+
+.action-icon {
+    font-size: 18px;
+}
+
+.action-count {
+    font-size: 13px;
+}
