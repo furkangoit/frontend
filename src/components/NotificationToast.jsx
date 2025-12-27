@@ -1,61 +1,42 @@
+// src/components/NotificationToast.jsx - BASİT VERSİYON
 import React from 'react';
-import { FaHeart, FaComment, FaUserPlus, FaUserMinus } from 'react-icons/fa';
 
-const NotificationToast = ({ notification, onClose }) => {
-  const getNotificationText = () => {
-    switch (notification.type) {
-      case 'like':
-        return `${notification.fromUsername} gönderinizi beğendi`;
-      case 'comment':
-        return `${notification.fromUsername} gönderinize yorum yaptı`;
-      case 'follow':
-        return `${notification.fromUsername} sizi takip etmeye başladı`;
-      case 'unlike':
-        return `${notification.fromUsername} beğenisini kaldırdı`;
-      default:
-        return 'Yeni bildirim';
-    }
-  };
-
-  const getNotificationIcon = () => {
-    switch (notification.type) {
-      case 'like':
-        return <FaHeart className="text-red-500" />;
-      case 'comment':
-        return <FaComment className="text-blue-500" />;
-      case 'follow':
-        return <FaUserPlus className="text-green-500" />;
-      case 'unlike':
-        return <FaUserMinus className="text-gray-500" />;
-      default:
-        return null;
-    }
-  };
+function NotificationToast({ message, onClose }) {
+  if (!message) return null;
 
   return (
-    <div className="fixed top-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 min-w-[300px] max-w-md z-50 animate-slideIn">
-      <div className="flex items-start">
-        <div className="flex-shrink-0 mr-3 text-xl">
-          {getNotificationIcon()}
-        </div>
-        <div className="flex-1">
-          <p className="text-gray-800 font-medium">{getNotificationText()}</p>
-          <p className="text-gray-500 text-sm mt-1">
-            {new Date(notification.timestamp).toLocaleTimeString('tr-TR', {
-              hour: '2-digit',
-              minute: '2-digit'
-            })}
-          </p>
-        </div>
-        <button
+    <div style={{
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      zIndex: 9999,
+      backgroundColor: '#28a745',
+      color: 'white',
+      padding: '15px 20px',
+      borderRadius: '5px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      minWidth: '300px',
+      animation: 'slideIn 0.3s ease-out'
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>🔔 {message}</span>
+        <button 
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 ml-2"
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            fontSize: '20px',
+            cursor: 'pointer',
+            padding: '0',
+            marginLeft: '10px'
+          }}
         >
           ×
         </button>
       </div>
     </div>
   );
-};
+}
 
 export default NotificationToast;

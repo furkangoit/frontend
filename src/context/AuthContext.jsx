@@ -1,5 +1,6 @@
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { api } from '../services/api';
+import { login as apiLogin, register as apiRegister, logout as apiLogout } from '../services/auth';
 
 const AuthContext = createContext();
 
@@ -10,107 +11,66 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-  // Check authentication on mount
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    const storedToken = localStorage.getItem('token');
-    
-    if (!storedToken) {
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/verify', {
-        headers: {
-          'Authorization': `Bearer ${storedToken}`
-        }
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setUser(data.user);
+    const initAuth = async () => {
+      const storedToken = localStorage.getItem('token');
+      const storedUser = localStorage.getItem('user');
+      
+      if (storedToken && storedUser) {
         setToken(storedToken);
-      } else {
-        localStorage.removeItem('token');
+        setUser(JSON.parse(storedUser));
       }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-      localStorage.removeItem('token');
-    } finally {
+      
       setLoading(false);
-    }
-  };
+    };
+    
+    initAuth();
+  }, []);
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setToken(data.token);
-        setUser(data.user);
-        return { success: true };
-      } else {
-        return { success: false, error: data.error };
-      }
+      const response = await apiLogin(email, password);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      setToken(response.token);
+      setUser(response.user);
+      
+      return { success: true, data: response };
     } catch (error) {
-      return { success: false, error: 'Network error' };
+      return { success: false, error: error.message };
     }
   };
 
   const register = async (userData) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.setItem('token', data.token);
-        setToken(data.token);
-        setUser(data.user);
-        return { success: true };
-      } else {
-        return { success: false, error: data.error };
-      }
+      const response = await apiRegister(userData);
+      
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      
+      setToken(response.token);
+      setUser(response.user);
+      
+      return { success: true, data: response };
     } catch (error) {
-      return { success: false, error: 'Network error' };
+      return { success: false, error: error.message };
     }
   };
 
-  const logout = async () => {
-    try {
-      await fetch('http://localhost:5000/api/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      localStorage.removeItem('token');
-      setToken(null);
-      setUser(null);
-    }
+  const logout = () => {
+    apiLogout();
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
   };
 
-  const updateUser = (updates) => {
-    setUser(prev => ({ ...prev, ...updates }));
+  const updateUser = (updatedUser) => {
+    const newUser = { ...user, ...updatedUser };
+    localStorage.setItem('user', JSON.stringify(newUser));
+    setUser(newUser);
   };
 
   const value = {
@@ -121,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     updateUser,
-    isAuthenticated: !!user
+    isAuthenticated: !!token
   };
 
   return (

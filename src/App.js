@@ -1,83 +1,116 @@
-
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// Yanlış: import { AuthContext, SocketContext } from './context';
-
-import Navbar from './components/layout/Navbar';
-import Home from './pages/Home';
-import Explore from './pages/Explore';
-import Profile from './pages/Profile';
-import Messages from './pages/Messages';
-import Login from './pages/Login';
-import Register from './pages/Register';
 import './App.css';
-import NotificationToast from './components/NotificationToast';
-import io from 'socket.io-client';
-
-
-
-import { AuthProvider } from './context/AuthContext';
-import { SocketProvider } from './context/SocketContext';
-
 
 function App() {
-	const [notifications, setNotifications] = useState([]);
-	const [socket, setSocket] = useState(null);
+  const [backendData, setBackendData] = useState({
+    status: '',
+    environment: '',
+    database: '',
+    timestamp: ''
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-	useEffect(() => {
-		// Socket bağlantısını kur
-		const newSocket = io('http://localhost:5000');
-		setSocket(newSocket);
+  useEffect(() => {
+    const fetchBackendStatus = async () => {
+      try {
+        console.log('🔄 Backend verisi çekiliyor...');
+        
+        // PROXY kullanıyoruz (package.json'da ayarlı)
+        const response = await fetch('/api/status');
+        
+        console.log('📡 Response status:', response.status);
+        
+        if (!response.ok) {
+          throw new Error(`Backend hatası: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        console.log('✅ Backend verisi alındı:', data);
+        
+        setBackendData(data);
+        setLoading(false);
+        
+      } catch (err) {
+        console.error('❌ Hata:', err.message);
+        setError(err.message);
+        setLoading(false);
+        
+        // Fallback data
+        setBackendData({
+          status: 'error',
+          environment: 'development',
+          database: 'disconnected',
+          timestamp: new Date().toISOString()
+        });
+      }
+    };
 
-		// Bildirim dinleyicisi
-		newSocket.on("new-notification", (notification) => {
-			console.log("🔔 Yeni bildirim:", notification);
-			setNotifications(prev => [notification, ...prev]);
-			// 5 saniye sonra otomatik kaldır
-			setTimeout(() => {
-				setNotifications(prev => prev.filter(n => n !== notification));
-			}, 5000);
-		});
+    fetchBackendStatus();
+  }, []);
 
-		return () => {
-			newSocket.close();
-		};
-	}, []);
+  if (loading) {
+    return (
+      <div className="App">
+        <div className="loading">
+          <h2>🔄 Backend bağlantısı kuruluyor...</h2>
+          <p>Port: 5001 - MongoDB Atlas</p>
+        </div>
+      </div>
+    );
+  }
 
-	const handleRemoveNotification = (notificationToRemove) => {
-		setNotifications(prev => prev.filter(n => n !== notificationToRemove));
-	};
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>🚀 FullStack Uygulaması</h1>
+        <p>Frontend (React:3000) + Backend (Node.js:5001) + MongoDB Atlas</p>
+        
+        {error && (
+          <div className="error">
+            <h3>❌ Hata: {error}</h3>
+            <p>Backend URL: http://localhost:5001/api/status</p>
+            <button onClick={() => window.location.reload()}>
+              Tekrar Dene
+            </button>
+          </div>
+        )}
 
-	return (
-		<AuthProvider>
-			<SocketProvider>
-				<Router>
-					<Navbar notifications={notifications} />
+        <div className="backend-info">
+          <h2>Backend Durumu:</h2>
+          <div className="status-card">
+            <p><strong>Status:</strong> {backendData.status || 'N/A'}</p>
+            <p><strong>Environment:</strong> {backendData.environment || 'N/A'}</p>
+            <p><strong>Database:</strong> {backendData.database || 'N/A'}</p>
+            <p><strong>Time:</strong> {
+              backendData.timestamp && backendData.timestamp !== 'Invalid Date' 
+                ? new Date(backendData.timestamp).toLocaleString() 
+                : 'Bağlantı yok'
+            }</p>
+          </div>
+        </div>
 
-					{/* Bildirim Toast'ları */}
-					<div className="fixed top-4 right-4 z-50 space-y-2">
-						{notifications.map((notification, index) => (
-							<NotificationToast
-								key={`${notification.timestamp}-${index}`}
-								notification={notification}
-								onClose={() => handleRemoveNotification(notification)}
-							/>
-						))}
-					</div>
-
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/explore" element={<Explore />} />
-						<Route path="/profile" element={<Profile />} />
-						<Route path="/messages" element={<Messages />} />
-						<Route path="/login" element={<Login />} />
-						<Route path="/register" element={<Register />} />
-					</Routes>
-				</Router>
-			</SocketProvider>
-		</AuthProvider>
-	);
+        <div className="links">
+          <a 
+            href="http://localhost:5001/api/status" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="btn"
+          >
+            🔗 Backend API'yi Görüntüle
+          </a>
+          <a 
+            href="https://cloud.mongodb.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="btn secondary"
+          >
+            📊 MongoDB Atlas Dashboard
+          </a>
+        </div>
+      </header>
+    </div>
+  );
 }
-
 
 export default App;

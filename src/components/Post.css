@@ -1,3 +1,283 @@
+/* Post.css - YENİ EKLENECEK STİLLER */
+
+/* User info in post header */
+.user-info-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.username {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+
+/* Post options */
+.post-options {
+    position: relative;
+    margin-left: auto;
+}
+
+.options-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #666;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.options-btn:hover {
+    background: #f0f0f0;
+}
+
+.options-menu {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    min-width: 150px;
+    overflow: hidden;
+}
+
+.options-menu button {
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.options-menu button:hover {
+    background: #f8f9fa;
+}
+
+.delete-btn {
+    color: #ff4757;
+}
+
+/* Edit post */
+.edit-post {
+    margin-bottom: 15px;
+}
+
+.edit-post textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    font-size: 15px;
+    resize: vertical;
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.edit-post textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.edit-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.save-btn {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.cancel-btn {
+    padding: 8px 16px;
+    background: #f8f9fa;
+    color: #666;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Comment user avatar */
+.comment-user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Comment actions */
+.comment-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 8px;
+}
+
+.comment-like-btn, .comment-reply-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.comment-like-btn:hover, .comment-reply-btn:hover {
+    background: #f8f9fa;
+}
+
+.comment-like-btn.liked {
+    color: #ff4757;
+}
+
+/* Comment replies */
+.comment-replies {
+    margin-top: 15px;
+    padding-left: 20px;
+    border-left: 2px solid #f0f0f0;
+}
+
+.show-replies-btn {
+    background: none;
+    border: none;
+    color: #667eea;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.show-replies-btn:hover {
+    background: #f0f3ff;
+}
+
+.replies-list {
+    margin-top: 10px;
+}
+
+/* Loading comments */
+.loading-comments {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-comments .spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+/* Home.css'ye ekleyecekleriniz */
+.post-user-info {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.post-user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.post-input-container {
+    flex: 1;
+}
+
+.post-actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e1e5e9;
+}
+
+.post-action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.file-upload-btn, .emoji-btn, .gif-btn, .poll-btn {
+    background: none;
+    border: none;
+    color: #667eea;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.file-upload-btn:hover, .emoji-btn:hover, .gif-btn:hover, .poll-btn:hover {
+    background: #f0f3ff;
+}
+
+.post-submit-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.char-count {
+    font-size: 14px;
+    color: #666;
+}
+
+.load-more {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.load-more-btn {
+    padding: 12px 30px;
+    background: #f8f9fa;
+    border: 2px solid #e1e5e9;
+    border-radius: 25px;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.load-more-btn:hover:not(:disabled) {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.load-more-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 /* ========== PAYLAŞIM MODAL STİLLERİ ========== */
 
